@@ -13,6 +13,10 @@ public class Model {
         return this.id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
         return this.id + ") " + this.name;
