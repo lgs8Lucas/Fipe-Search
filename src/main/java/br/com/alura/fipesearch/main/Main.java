@@ -1,8 +1,6 @@
 package br.com.alura.fipesearch.main;
 
-import br.com.alura.fipesearch.models.Brand;
-import br.com.alura.fipesearch.models.BrandFipeAPI;
-import br.com.alura.fipesearch.models.InvalidOptionException;
+import br.com.alura.fipesearch.models.*;
 import br.com.alura.fipesearch.services.APIConsumption;
 import br.com.alura.fipesearch.services.ConvertData;
 
@@ -30,14 +28,26 @@ public class Main {
         else if (("caminhões").contains(type.toLowerCase())) type = "caminhoes";
         else throw new InvalidOptionException("Tipo de veículo inválido!");
 
-        System.out.println(URI + type + "/marcas");
         var json = api.getData(URI + type + "/marcas");
-        System.out.println(json);
 
         List<Brand> brands = convertData.getListData(json, BrandFipeAPI.class).stream().map(Brand::new).toList();
         System.out.println("Escolha o modelo do veículo: ");
         brands.stream().sorted(Comparator.comparing(Brand::getId)).forEach(System.out::println);
         System.out.print("Digite a sua escolha: ");
+        var brand = sc.nextInt();
+        sc.nextLine();
+
+        json = api.getData(URI + type + "/marcas/" + brand + "/modelos");
+
+        System.out.println(json);
+
+        List<Model> models = convertData.getData(json, ModelsFipeAPI.class).modelos()
+                .stream()
+                .map(Model::new)
+                .toList();
+
+        models.forEach(System.out::println);
+
 
 
     }
